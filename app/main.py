@@ -13,6 +13,7 @@ from typing import Dict
 import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
@@ -77,7 +78,10 @@ app = FastAPI(
 async def _validation_exception_handler(request: Request, exc: RequestValidationError):
     # FastAPI's default 422 body is already informative; this just keeps the shape
     # consistent ({"detail": ...}) with the rest of the API's error responses.
-    return JSONResponse(status_code=422, content={"detail": exc.errors()})
+    # jsonable_encoder converts any non-JSON-safe values inside the error list
+    # (e.g. a raw ValueError object from a custom field_validator) into plain
+    # JSON-safe strings, instead of letting json.dumps crash on them directly.
+    return JSONResponse(status_code=422, content={"detail": jsonable_encoder(exc.errors())})
 
 
 @app.exception_handler(Exception)
