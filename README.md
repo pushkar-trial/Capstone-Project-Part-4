@@ -15,7 +15,6 @@ D2C Customer Churn Capstone, Part 4 of 4. Wraps the Gradient Boosting model trai
 ├── data/
 │   └── rfm_modeling_snapshot.csv   # Source data (for train_model.py reproducibility only)
 ├── model.pkl                  # Trained model from Part 3 (sklearn Pipeline: preprocessing + Gradient Boosting)
-├── colab_demo.ipynb            # Runs the real API inside Google Colab (see "On Google Colab" below)
 ├── train_model.py              # Optional script to reproduce model.pkl from source data
 ├── monitoring_plan.md           # Data drift, prediction drift, outcome tracking, retraining triggers, responsible use
 ├── Dockerfile                    # Optional containerized deployment
@@ -24,18 +23,7 @@ D2C Customer Churn Capstone, Part 4 of 4. Wraps the Gradient Boosting model trai
 
 ## How to Run
 
-### On Google Colab
-
-A FastAPI service is a long-running server, which doesn't map directly onto Colab's cell-based execution model — but `colab_demo.ipynb` runs the **actual, unmodified app** (`app/main.py`) inside a Colab notebook by launching a real `uvicorn` server in a background thread, then sending real HTTP requests to it.
-
-1. Upload `part4_capstone.zip` to the Colab file browser (left sidebar → Files → upload).
-2. Open `colab_demo.ipynb` in Colab.
-3. Run the cells top to bottom. It installs dependencies, unzips the app files, starts the server, and exercises `/health`, `/predict`, and `/batch_predict` with real requests — then runs the full pytest suite and (optionally) reproduces `model.pkl` from source data.
-
-No code in `app/` is changed for the Colab demo — only the notebook's own setup cells differ from a normal local run.
-
 ### Locally
-
 
 ```bash
 python -m venv venv
